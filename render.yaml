@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: baseball_app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.4
+      - key: SECRET_KEY
+        sync: false
+      - key: ADMIN_CODE
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+    autoDeploy: true
+    buildFilter:
+      clearCache: true
+    plan: free
