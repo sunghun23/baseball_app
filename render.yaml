@@ -6,14 +6,12 @@ services:
     startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
-        value: 3.13.4
+        value: 3.11.9
       - key: SECRET_KEY
-        sync: false
+        value: "your-secret-key"
       - key: ADMIN_CODE
-        sync: false
+        value: "your-admin-code"
       - key: DATABASE_URL
-        sync: false
-    autoDeploy: true
-    buildFilter:
-      clearCache: true
+        value: "postgresql://postgres:Baby100412!@db.ebllssdqrwedkyjwuedj.supabase.co:5432/postgres"
     plan: free
+    region: oregon
