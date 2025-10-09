@@ -6,12 +6,12 @@ services:
     startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.9
+      - value: 3.11.9
       - key: SECRET_KEY
         value: "your-secret-key"
       - key: ADMIN_CODE
         value: "your-admin-code"
       - key: DATABASE_URL
-        value: "postgresql://postgres:Baby100412!@db.ebllssdqrwedkyjwuedj.supabase.co:5432/postgres"
+        value: "postgresql://postgres:@db.ebllssdqrwedkyjwuedj.supabase.co:5432/postgres"
     plan: free
     region: oregon
