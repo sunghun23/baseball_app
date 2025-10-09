@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center mb-4">📊 전체 리더보드 요약</h2>
+
+<div class="row">
+  <!-- 타격 통계 -->
+  <div class="col-md-6">
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-primary text-white">
+        <strong>타자 스탯</strong>
+      </div>
+      <div class="card-body">
+        <table class="table table-sm table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>이름</th>
+              <th>팀</th>
+              <th>타수</th>
+              <th>안타</th>
+              <th>홈런</th>
+              <th>타점</th>
+              <th>AVG</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for b in bat_stats %}
+            <tr>
+              <td><a href="{{ url_for('player_detail', player_id=b.id) }}">{{ b.name }}</a></td>
+              <td>{{ b.team or '-' }}</td>
+              <td>{{ b.ab }}</td>
+              <td>{{ b.hits }}</td>
+              <td>{{ b.hr }}</td>
+              <td>{{ b.rbi }}</td>
+              <td><strong>{{ '%.3f'|format(b.avg or 0) }}</strong></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="text-center text-muted">등록된 데이터가 없습니다.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 투수 통계 -->
+  <div class="col-md-6">
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-success text-white">
+        <strong>투수 스탯</strong>
+      </div>
+      <div class="card-body">
+        <table class="table table-sm table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>이름</th>
+              <th>팀</th>
+              <th>이닝</th>
+              <th>실점</th>
+              <th>삼진</th>
+              <th>볼넷</th>
+              <th>ERA</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in pit_stats %}
+            <tr>
+              <td><a href="{{ url_for('player_detail', player_id=p.id) }}">{{ p.name }}</a></td>
+              <td>{{ p.team or '-' }}</td>
+              <td>{{ p.inn }}</td>
+              <td>{{ p.er }}</td>
+              <td>{{ p.so }}</td>
+              <td>{{ p.bb }}</td>
+              <td><strong>{{ '%.2f'|format(p.era or 0) }}</strong></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="text-center text-muted">등록된 데이터가 없습니다.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-center mt-4">
+  <a href="{{ url_for('leaderboard') }}" class="btn btn-dark btn-lg">📈 상세 리더보드 보기</a>
+</div>
+{% endblock %}

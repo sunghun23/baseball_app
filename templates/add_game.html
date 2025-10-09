@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-4 text-center">⚾ 경기 등록</h3>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="POST">
+          <div class="mb-3">
+            <label for="name" class="form-label">경기 이름</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="예: 2025년 10월 10일 경기" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="date" class="form-label">날짜</label>
+            <input type="date" name="date" id="date" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="location" class="form-label">장소</label>
+            <input type="text" name="location" id="location" class="form-control" placeholder="예: 서울 구장">
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">등록하기</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <a href="{{ url_for('leaderboard') }}" class="btn btn-outline-secondary btn-sm">← 리더보드로 돌아가기</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

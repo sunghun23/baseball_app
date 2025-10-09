@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-3">{{ player['name'] }} 선수 상세 페이지</h2>
+  <p class="text-center text-muted">
+    팀: {{ player['team'] or '-' }} | 포지션: {{ player['position'] or '-' }}
+  </p>
+
+  <hr>
+
+  <div class="row mt-4">
+    <!-- 타격 요약 -->
+    <div class="col-md-6">
+      <h4 class="mb-2">⚾ 타격 통계</h4>
+      <ul class="list-group mb-3">
+        <li class="list-group-item">타수(AB): {{ totals_b['ab'] }}</li>
+        <li class="list-group-item">안타(H): {{ totals_b['hits'] }}</li>
+        <li class="list-group-item">홈런(HR): {{ totals_b['hr'] }}</li>
+        <li class="list-group-item">타점(RBI): {{ totals_b['rbi'] }}</li>
+        <li class="list-group-item"><strong>타율(AVG): {{ "%.3f"|format(agg_avg) }}</strong></li>
+      </ul>
+      <canvas id="batChart" height="150"></canvas>
+    </div>
+
+    <!-- 투수 요약 -->
+    <div class="col-md-6">
+      <h4 class="mb-2">🥎 투수 통계</h4>
+      <ul class="list-group mb-3">
+        <li class="list-group-item">이닝(IP): {{ totals_p['inn'] }}</li>
+        <li class="list-group-item">자책점(ER): {{ totals_p['er'] }}</li>
+        <li class="list-group-item">삼진(SO): {{ totals_p['so'] }}</li>
+        <li class="list-group-item">볼넷(BB): {{ totals_p['bb'] }}</li>
+        <li class="list-group-item"><strong>ERA: {{ "%.2f"|format(agg_era) }}</strong></li>
+      </ul>
+      <canvas id="pitChart" height="150"></canvas>
+    </div>
+  </div>
+
+  <hr class="mt-4">
+
+  <!-- 타격 기록 테이블 -->
+  <h4 class="mt-4">📋 타격 기록</h4>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>날짜</th>
+        <th>경기</th>
+        <th>AB</th>
+        <th>H</th>
+        <th>HR</th>
+        <th>RBI</th>
+        <th>타율</th>
+        {% if is_admin %}<th>관리</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for b in batting %}
+      <tr>
+        <td>{{ b['game_date'] or b['created_at'][:10] }}</td>
+        <td>{{ b['game_name'] or '-' }}</td>
+        <td>{{ b['ab'] }}</td>
+        <td>{{ b['hits'] }}</td>
+        <td>{{ b['hr'] }}</td>
+        <td>{{ b['rbi'] }}</td>
+        <td>{{ "%.3f"|format(b['per_game_avg']) }}</td>
+        {% if is_admin %}
+        <td>
+          <a href="{{ url_for('edit_batting', record_id=b['id']) }}" class="btn btn-sm btn-warning">수정</a>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- 투수 기록 테이블 -->
+  <h4 class="mt-4">📊 투수 기록</h4>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>날짜</th>
+        <th>경기</th>
+        <th>IP</th>
+        <th>ER</th>
+        <th>SO</th>
+        <th>BB</th>
+        <th>ERA</th>
+        {% if is_admin %}<th>관리</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in pitching %}
+      <tr>
+        <td>{{ p['game_date'] or p['created_at'][:10] }}</td>
+        <td>{{ p['game_name'] or '-' }}</td>
+        <td>{{ p['innings'] }}</td>
+        <td>{{ p['er'] }}</td>
+        <td>{{ p['so'] }}</td>
+        <td>{{ p['bb'] }}</td>
+        <td>{{ "%.2f"|format(p['per_game_era']) }}</td>
+        {% if is_admin %}
+        <td>
+          <a href="{{ url_for('edit_pitching', record_id=p['id']) }}" class="btn btn-sm btn-warning">수정</a>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="mt-4 text-center">
+    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">← 홈으로</a>
+  </div>
+</div>
+
+<!-- 그래프 스크립트 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const batCtx = document.getElementById('batChart');
+const pitCtx = document.getElementById('pitChart');
+
+// 타격 그래프
+new Chart(batCtx, {
+  type: 'line',
+  data: {
+    labels: {{ b_labels|tojson }},
+    datasets: [
+      {
+        label: '경기별 타율',
+        data: {{ b_avg_series|tojson }},
+        borderColor: '#2b6cb0',
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: '누적 HR',
+        data: {{ b_hr_series|tojson }},
+        borderColor: '#d9534f',
+        borderDash: [5,5],
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: '누적 RBI',
+        data: {{ b_rbi_series|tojson }},
+        borderColor: '#5cb85c',
+        borderDash: [2,2],
+        tension: 0.3,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    plugins: { legend: { position: 'bottom' } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+
+// 투수 그래프
+new Chart(pitCtx, {
+  type: 'line',
+  data: {
+    labels: {{ p_labels|tojson }},
+    datasets: [
+      {
+        label: '경기별 ERA',
+        data: {{ p_era_series|tojson }},
+        borderColor: '#ff9900',
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: '누적 SO',
+        data: {{ p_k_series|tojson }},
+        borderColor: '#007bff',
+        borderDash: [4,4],
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: '누적 IP',
+        data: {{ p_ip_series|tojson }},
+        borderColor: '#00a676',
+        borderDash: [3,3],
+        tension: 0.3,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    plugins: { legend: { position: 'bottom' } },
+    scales: { y: { beginAtZero: true } }
+  }
+});
+</script>
+{% endblock %}

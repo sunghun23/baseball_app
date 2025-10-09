@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-4 text-center">⚾ 타격 기록 등록</h3>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="POST">
+
+          <div class="mb-3">
+            <label for="player_id" class="form-label">선수 선택</label>
+            <select name="player_id" id="player_id" class="form-select" required>
+              <option value="">선수를 선택하세요</option>
+              {% for p in players %}
+              <option value="{{ p['id'] }}">{{ p['name'] }} ({{ p['position'] or 'N/A' }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="game_id" class="form-label">경기 선택 (선택사항)</label>
+            <select name="game_id" id="game_id" class="form-select">
+              <option value="">경기를 선택하지 않음</option>
+              {% for g in games %}
+              <option value="{{ g['id'] }}">{{ g['name'] }} {% if g['date'] %}({{ g['date'] }}){% endif %}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <label for="ab" class="form-label">타수 (AB)</label>
+              <input type="number" min="0" name="ab" id="ab" class="form-control" required>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="hits" class="form-label">안타 (H)</label>
+              <input type="number" min="0" name="hits" id="hits" class="form-control" required>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="hr" class="form-label">홈런 (HR)</label>
+              <input type="number" min="0" name="hr" id="hr" class="form-control">
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="rbi" class="form-label">타점 (RBI)</label>
+              <input type="number" min="0" name="rbi" id="rbi" class="form-control">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">기록 등록</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm">← 돌아가기</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

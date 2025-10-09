@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-4 text-center">🧾 선수 등록</h3>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="POST">
+          <div class="mb-3">
+            <label for="name" class="form-label">이름</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="선수 이름을 입력하세요" required>
+          </div>
+          <div class="mb-3">
+            <label for="team" class="form-label">팀명</label>
+            <input type="text" name="team" id="team" class="form-control" placeholder="팀 이름을 입력하세요">
+          </div>
+          <div class="mb-3">
+            <label for="position" class="form-label">포지션</label>
+            <select name="position" id="position" class="form-select">
+              <option value="">선택</option>
+              <option value="P">투수 (Pitcher)</option>
+              <option value="C">포수 (Catcher)</option>
+              <option value="1B">1루수</option>
+              <option value="2B">2루수</option>
+              <option value="3B">3루수</option>
+              <option value="SS">유격수</option>
+              <option value="LF">좌익수</option>
+              <option value="CF">중견수</option>
+              <option value="RF">우익수</option>
+              <option value="DH">지명타자</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">등록하기</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm">← 돌아가기</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

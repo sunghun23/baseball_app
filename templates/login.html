@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white text-center py-3">
+        <h5 class="mb-0">⚙️ 관리자 로그인</h5>
+      </div>
+      <div class="card-body">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {% if is_admin %}
+          <div class="alert alert-success text-center">이미 관리자 권한으로 로그인되어 있습니다.</div>
+        {% endif %}
+        <form method="POST">
+          <div class="mb-3">
+            <label for="code" class="form-label">관리자 코드</label>
+            <input type="password" name="code" id="code" class="form-control" placeholder="관리자 코드를 입력하세요" required>
+          </div>
+          <button type="submit" class="btn btn-dark w-100">로그인</button>
+        </form>
+      </div>
+      <div class="card-footer text-center bg-light">
+        <a href="{{ url_for('index') }}" class="text-muted">← 홈으로 돌아가기</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
