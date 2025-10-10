@@ -22,44 +22,44 @@ def init_db():
     conn = get_db()
     cur = conn.cursor()
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS players (
-            id SERIAL PRIMARY KEY,
-            name TEXT UNIQUE NOT NULL,
-            position TEXT,
-            team TEXT
-        );
+    CREATE TABLE IF NOT EXISTS players (
+        id SERIAL PRIMARY KEY,
+        name TEXT UNIQUE NOT NULL,
+        position TEXT,
+        team TEXT
+    );
 
-        CREATE TABLE IF NOT EXISTS games (
-            id SERIAL PRIMARY KEY,
-            name TEXT NOT NULL,
-            date TEXT,
-            location TEXT
-        );
+    CREATE TABLE IF NOT EXISTS games (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        date TEXT,
+        location TEXT
+    );
 
-        CREATE TABLE IF NOT EXISTS batting (
-            id SERIAL PRIMARY KEY,
-            player_id INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
-            game_id INTEGER REFERENCES games(id) ON DELETE SET NULL,
-            ab INTEGER DEFAULT 0,
-            hits INTEGER DEFAULT 0,
-            hr INTEGER DEFAULT 0,
-            rbi INTEGER DEFAULT 0,
-            avg REAL DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+    CREATE TABLE IF NOT EXISTS batting (
+        id SERIAL PRIMARY KEY,
+        player_id INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
+        game_id INTEGER REFERENCES games(id) ON DELETE SET NULL,
+        ab INTEGER DEFAULT 0,
+        hits INTEGER DEFAULT 0,
+        hr INTEGER DEFAULT 0,
+        rbi INTEGER DEFAULT 0,
+        avg NUMERIC(5,3) DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
 
-        CREATE TABLE IF NOT EXISTS pitching (
-            id SERIAL PRIMARY KEY,
-            player_id INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
-            game_id INTEGER REFERENCES games(id) ON DELETE SET NULL,
-            innings REAL DEFAULT 0,
-            er INTEGER DEFAULT 0,
-            so INTEGER DEFAULT 0,
-            bb INTEGER DEFAULT 0,
-            era REAL DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    """)
+    CREATE TABLE IF NOT EXISTS pitching (
+        id SERIAL PRIMARY KEY,
+        player_id INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
+        game_id INTEGER REFERENCES games(id) ON DELETE SET NULL,
+        innings NUMERIC(5,2) DEFAULT 0,
+        er INTEGER DEFAULT 0,
+        so INTEGER DEFAULT 0,
+        bb INTEGER DEFAULT 0,
+        era NUMERIC(5,2) DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+""")
     # indexes
     cur.execute("CREATE INDEX IF NOT EXISTS idx_batting_player ON batting(player_id);")
     cur.execute("CREATE INDEX IF NOT EXISTS idx_batting_game ON batting(game_id);")
