@@ -69,10 +69,6 @@ def init_db():
     cur.close()
     conn.close()
 
-
-init_db()
-
-
 # -------------------- Auth / Guards --------------------
 def admin_required(f):
     @wraps(f)
@@ -780,5 +776,6 @@ def healthz():
 
 # -------------------- Run --------------------
 if __name__ == "__main__":
-    # For local dev; on Render use gunicorn via Procfile
+    # 로컬에서 초기 테이블 세팅할 때만 사용
+    # init_db()  # 필요할 때만 수동 실행
     app.run(host="0.0.0.0", port=5000, debug=False)
