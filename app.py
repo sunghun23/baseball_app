@@ -13,7 +13,7 @@ from psycopg2.extras import RealDictCursor
 # -------------------- Config --------------------
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_secret_key")
-ADMIN_CODE = os.getenv("ADMIN_CODE", "adinm")
+ADMIN_CODE = os.getenv("ADMIN_CODE", "admin")
 DB_URL = os.getenv("DATABASE_URL")  # Supabase/Render PG URL
 
 # -------------------- DB Helpers --------------------
