@@ -1,3 +1,8 @@
+#깃허브 업로드 및 푸쉬
+#git add .
+#git commit -m "update: all project files (templates, static, app.py etc)"
+#git push
+
 # app.py
 import os
 from functools import wraps
