@@ -1,4 +1,3 @@
-# app.py
 import os
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
@@ -9,14 +8,15 @@ from psycopg2.extras import RealDictCursor
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_secret_key")
 ADMIN_CODE = os.getenv("ADMIN_CODE", "admin123")
-DB_URL = os.getenv("DATABASE_URL")  # e.g. postgresql://postgres:xxxx@host:5432/postgres
-
+DB_URL = os.getenv("DATABASE_URL")  # Supabase/Render PG URL
 
 # -------------------- DB Helpers --------------------
 def get_db():
-    # DB_URL should include sslmode=require for hosted Postgres (e.g., Supabase/Render)
-    return psycopg2.connect(DB_URL, cursor_factory=RealDictCursor)
-
+    db_url = DB_URL or ""
+    # sslmode=require 자동 부착 (Supabase, Render에서 필수)
+    if db_url and "sslmode=" not in db_url:
+        db_url += ("&" if "?" in db_url else "?") + "sslmode=require"
+    return psycopg2.connect(db_url, cursor_factory=RealDictCursor)
 
 def init_db():
     conn = get_db()
