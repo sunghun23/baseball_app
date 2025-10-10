@@ -1,7 +1,6 @@
 # app.py
 import os
 from functools import wraps
-
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import psycopg2
 from psycopg2.extras import RealDictCursor
