@@ -6,6 +6,15 @@
     팀: {{ player['team'] or '-' }} | 포지션: {{ player['position'] or '-' }}
   </p>
 
+  {% if is_admin %}
+  <div class="text-center mb-3">
+    <a href="{{ url_for('edit_player', player_id=player.id) }}" class="btn btn-warning btn-sm">✏️ 선수 수정</a>
+    <form action="{{ url_for('delete_player', player_id=player.id) }}" method="POST" style="display:inline;">
+      <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?')">🗑️ 선수 삭제</button>
+    </form>
+  </div>
+  {% endif %}
+
   <hr>
 
   <div class="row mt-4">
