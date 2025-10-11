@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">✏️ 선수 정보 수정</h2>
+
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">이름</label>
+      <input type="text" class="form-control" name="name" value="{{ player.name }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">포지션</label>
+      <input type="text" class="form-control" name="position" value="{{ player.position or '' }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">팀</label>
+      <input type="text" class="form-control" name="team" value="{{ player.team or '' }}">
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <a href="{{ url_for('player_detail', player_id=player.id) }}" class="btn btn-outline-secondary">← 돌아가기</a>
+      <button type="submit" class="btn btn-primary">저장하기</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
