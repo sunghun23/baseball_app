@@ -12,5 +12,5 @@ services:
         sync: false
       - key: DATABASE_URL
         sync: false
-        value: "postgresql://postgres:@db.ebllssdqrwedkyjwuedj.supabase.co:5432/postgres"
+        value: "postgresql://postgres.ebllssdqrwedkyjwuedj:Baby100412!@aws-1-ap-south-1.pooler.supabase.com:5432/postgres"
     region: oregon
