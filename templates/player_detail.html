@@ -24,7 +24,7 @@
       <ul class="list-group mb-3">
         <li class="list-group-item">타수(AB): {{ totals_b['ab'] }}</li>
         <li class="list-group-item">안타(H): {{ totals_b['hits'] }}</li>
-        <li class="list-group-item">홈런(HR): {{ totals_b['hr'] }}</li>
+        <li class="list-group-item">홈런(HR): {{ totals_b['hr'] }}</li>
         <li class="list-group-item">타점(RBI): {{ totals_b['rbi'] }}</li>
         <li class="list-group-item"><strong>타율(AVG): {{ "%.3f"|format(agg_avg) }}</strong></li>
       </ul>
@@ -69,7 +69,7 @@
           {% if b['game_date'] %}
             {{ b['game_date'] }}
           {% else %}
-            {{ b['created_at']|string[:10] }}
+            {{ b['created_at'][:10] }}
           {% endif %}
         </td>
         <td>{{ b['game_name'] or '-' }}</td>
@@ -111,7 +111,7 @@
           {% if p['game_date'] %}
             {{ p['game_date'] }}
           {% else %}
-            {{ p['created_at']|string[:10] }}
+            {{ p['created_at'][:10] }}
           {% endif %}
         </td>
         <td>{{ p['game_name'] or '-' }}</td>
@@ -136,7 +136,6 @@
   </div>
 </div>
 
-<!-- 그래프 스크립트 -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const batCtx = document.getElementById('batChart');
