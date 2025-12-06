@@ -604,7 +604,11 @@ def player_detail(player_id):
             FROM pitching p
             LEFT JOIN games g ON g.id=p.game_id
             WHERE p.player_id=%s
-            ORDER BY COALESCE(g.date, to_char(p.created_at,'YYYY-MM-DD')), p.id
+            ORDER BY COALESCE(
+                g.date::text,
+                to_char(p.created_at,'YYYY-MM-DD')
+            ),
+            p.id
         """, (player_id,))
         pitching = cur.fetchall()
 
