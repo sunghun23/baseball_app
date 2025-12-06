@@ -65,13 +65,20 @@
     <tbody>
       {% for b in batting %}
       <tr>
-        <td>{{ b['game_date'] or b['created_at'][:10] }}</td>
+        <td>
+          {% if b['game_date'] %}
+            {{ b['game_date'] }}
+          {% else %}
+            {{ b['created_at']|string[:10] }}
+          {% endif %}
+        </td>
         <td>{{ b['game_name'] or '-' }}</td>
         <td>{{ b['ab'] }}</td>
         <td>{{ b['hits'] }}</td>
         <td>{{ b['hr'] }}</td>
         <td>{{ b['rbi'] }}</td>
         <td>{{ "%.3f"|format(b['per_game_avg']) }}</td>
+
         {% if is_admin %}
         <td>
           <a href="{{ url_for('edit_batting', record_id=b['id']) }}" class="btn btn-sm btn-warning">수정</a>
@@ -100,13 +107,20 @@
     <tbody>
       {% for p in pitching %}
       <tr>
-        <td>{{ p['game_date'] or p['created_at'][:10] }}</td>
+        <td>
+          {% if p['game_date'] %}
+            {{ p['game_date'] }}
+          {% else %}
+            {{ p['created_at']|string[:10] }}
+          {% endif %}
+        </td>
         <td>{{ p['game_name'] or '-' }}</td>
         <td>{{ p['innings'] }}</td>
         <td>{{ p['er'] }}</td>
         <td>{{ p['so'] }}</td>
         <td>{{ p['bb'] }}</td>
         <td>{{ "%.2f"|format(p['per_game_era']) }}</td>
+
         {% if is_admin %}
         <td>
           <a href="{{ url_for('edit_pitching', record_id=p['id']) }}" class="btn btn-sm btn-warning">수정</a>
