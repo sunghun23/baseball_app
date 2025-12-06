@@ -575,18 +575,22 @@ def player_detail(player_id):
             return redirect(url_for("index"))
 
         cur.execute("""
-            SELECT b.id,
-                   g.name AS game_name,
-                   g.date AS game_date,
-                   b.ab, b.hits, b.hr, b.rbi,
-                   ROUND( (CASE WHEN b.ab>0 THEN b.hits*1.0/b.ab ELSE 0 END)::numeric, 3 ) AS per_game_avg,
-                   b.avg AS snapshot_avg,
-                   b.created_at
-            FROM batting b
-            LEFT JOIN games g ON g.id=b.game_id
-            WHERE b.player_id=%s
-            ORDER BY COALESCE(g.date, to_char(b.created_at,'YYYY-MM-DD')), b.id
-        """, (player_id,))
+    SELECT b.id,
+           g.name AS game_name,
+           g.date AS game_date,
+           b.ab, b.hits, b.hr, b.rbi,
+           ROUND( (CASE WHEN b.ab>0 THEN b.hits*1.0/b.ab ELSE 0 END)::numeric, 3 ) AS per_game_avg,
+           b.avg AS snapshot_avg,
+           b.created_at
+    FROM batting b
+    LEFT JOIN games g ON g.id=b.game_id
+    WHERE b.player_id=%s
+    ORDER BY COALESCE(
+        to_char(g.date, 'YYYY-MM-DD'),
+        to_char(b.created_at, 'YYYY-MM-DD')
+    ) DESC,
+    b.id
+""", (player_id,))
         batting = cur.fetchall()
 
         cur.execute("""
