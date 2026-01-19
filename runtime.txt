@@ -1,1 +1,4 @@
+flask
+gunicorn
+psycopg2-binary
 python-3.11.9
